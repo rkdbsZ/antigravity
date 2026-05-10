@@ -94,6 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const rawFormula = formulaInput.value;
         if (!rawFormula.trim()) {
             functionLine.setAttribute('d', '');
+            formulaInput.style.borderColor = "#f1f5f9";
+            equationDisplay.textContent = "f(x) = ";
+            equationDisplay.style.color = "var(--accent-color)";
             return;
         }
 
@@ -102,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxX = rangeMax.value === "" ? 10 : parseFloat(rangeMax.value);
 
         equationDisplay.textContent = `f(x) = ${rawFormula}`;
+        equationDisplay.style.color = "var(--accent-color)";
 
         try {
             const computeY = new Function('x', `return ${jsFormula};`);
@@ -133,8 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
             functionLine.setAttribute('d', pathData);
             formulaInput.style.borderColor = "#f1f5f9";
         } catch (e) {
+            console.error("그래프 렌더링 오류:", e);
             formulaInput.style.borderColor = "#f87171";
             functionLine.setAttribute('d', '');
+            equationDisplay.textContent = "⚠️ 수식에 오류가 있습니다";
+            equationDisplay.style.color = "#f87171";
         }
     };
 

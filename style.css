@@ -176,6 +176,7 @@ body {
     flex-direction: column;
     gap: 6px;
     flex: 1;
+    min-width: 0; /* 부모 요소를 넘어가지 않도록 강제 */
 }
 
 .input-field label {
@@ -191,6 +192,8 @@ body {
     font-size: 0.95rem;
     font-weight: 600;
     outline: none;
+    width: 100%;
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
 }
 
 .input-field input:focus {
