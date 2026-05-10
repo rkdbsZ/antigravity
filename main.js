@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
-     * [수정] 거듭제곱을 Math.pow()로 변환하여 음수 부호 오류 해결
+     * [수정] 이차함수 표준형 등 복잡한 수식의 괄호 거듭제곱 및 암시적 곱셈 오류 해결
      */
     const parseFormula = (str) => {
         let f = str.toLowerCase().replace(/\s+/g, '');
@@ -73,19 +73,77 @@ document.addEventListener('DOMContentLoaded', () => {
         } while (f !== prev);
 
         // 2. 거듭제곱 변환 (x^n -> Math.pow(x, n))
-        // [수정] ** 기호 대신 Math.pow 함수를 사용하여 음수 계수(-x^2) 충돌 방지
-        f = f.replace(/([x\d\)]+)\^(\d+)/g, 'Math.pow($1,$2)');
+        // 괄호가 포함된 밑(base)과 지수(exponent)를 올바르게 파싱하기 위한 커스텀 함수
+        const replacePower = (s) => {
+            let i = s.indexOf('^');
+            while (i !== -1) {
+                let baseStart = i - 1;
+                let base = "";
+                // 밑(base)이 괄호로 묶여 있는 경우
+                if (s[baseStart] === ')') {
+                    let parenCount = 1;
+                    baseStart--;
+                    while (baseStart >= 0 && parenCount > 0) {
+                        if (s[baseStart] === ')') parenCount++;
+                        else if (s[baseStart] === '(') parenCount--;
+                        baseStart--;
+                    }
+                    // 함수 이름(예: sin, abs)이 괄호 앞에 있는 경우 포함
+                    while (baseStart >= 0 && /[a-z]/i.test(s[baseStart])) {
+                        baseStart--;
+                    }
+                    baseStart++;
+                } else {
+                    // 숫자, 변수(x) 등 괄호가 없는 단일 밑
+                    while (baseStart >= 0 && /[a-z0-9.]/i.test(s[baseStart])) {
+                        baseStart--;
+                    }
+                    baseStart++;
+                }
+                base = s.substring(baseStart, i);
 
-        // 3. 생략된 곱셈(*) 삽입
-        f = f.replace(/(\d|x|\))(?=[x(|a-z])/g, '$1*');
+                let expEnd = i + 1;
+                let exp = "";
+                // 지수(exponent)가 괄호로 묶여 있는 경우
+                if (s[expEnd] === '(') {
+                    let parenCount = 1;
+                    expEnd++;
+                    while (expEnd < s.length && parenCount > 0) {
+                        if (s[expEnd] === '(') parenCount++;
+                        else if (s[expEnd] === ')') parenCount--;
+                        expEnd++;
+                    }
+                } else {
+                    if (s[expEnd] === '-') expEnd++; // 음수 지수 허용
+                    while (expEnd < s.length && /[a-z0-9.]/i.test(s[expEnd])) {
+                        expEnd++;
+                    }
+                }
+                exp = s.substring(i + 1, expEnd);
+
+                // Javascript 내장 Math.pow 형태로 치환
+                s = s.substring(0, baseStart) + `Math.pow(${base},${exp})` + s.substring(expEnd);
+                i = s.indexOf('^');
+            }
+            return s;
+        };
+
+        f = replacePower(f);
+
+        // 3. 생략된 곱셈(*) 삽입 (예: 2(x-3) -> 2*(x-3), 2x -> 2*x)
+        // 대소문자 구분을 없애(a-zA-Z) 대문자 'M'을 가진 Math.pow 앞에도 곱셈(*)이 올바르게 삽입되도록 수정
+        f = f.replace(/(\d|x|\))(?=[x(|a-zA-Z])/g, '$1*');
 
         // 4. 수학 함수 접두사 (abs -> Math.abs 등)
-        // 이미 Math.pow로 바뀐 것은 제외하고 처리
         const mathFunctions = ['abs', 'sin', 'cos', 'tan', 'sqrt', 'log', 'exp'];
         mathFunctions.forEach(fn => {
             const reg = new RegExp(`\\b${fn}\\(`, 'g');
             f = f.replace(reg, `Math.${fn}(`);
         });
+
+        // 5. 수학 상수 지원 (pi, e)
+        f = f.replace(/\bpi\b/g, 'Math.PI');
+        f = f.replace(/\be\b/g, 'Math.E');
 
         return f;
     };
