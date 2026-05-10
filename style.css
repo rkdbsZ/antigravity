@@ -1,0 +1,232 @@
+/* 
+   프리미엄 사이드바 디자인 시스템 
+*/
+:root {
+    --bg-color: #f1f5f9;
+    --panel-bg: #ffffff;
+    --accent-color: #6366f1;
+    --accent-secondary: #f43f5e; /* 꼭짓점 표시용 색상 */
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    overflow: hidden; /* 사이드바 스크롤만 허용 */
+}
+
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 왼쪽 메인 영역 */
+.graph-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
+}
+
+.grid-paper {
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: var(--shadow-premium);
+    position: relative;
+    border: 1px solid #e2e8f0;
+}
+
+#graph-svg {
+    position: absolute;
+    top: -40px;
+    left: -40px;
+}
+
+.paper-header {
+    position: absolute;
+    top: -60px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.paper-header h1 {
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* 오른쪽 사이드 패널 */
+.side-panel {
+    width: 350px;
+    background: var(--panel-bg);
+    border-left: 1px solid #e2e8f0;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    box-shadow: -10px 0 15px -3px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.panel-section {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 수식 입력함 */
+.formula-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.formula-box label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+#formula-input {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: 2px solid #f1f5f9;
+    background: #f8fafc;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    outline: none;
+    transition: all 0.2s;
+}
+
+#formula-input:focus {
+    border-color: var(--accent-color);
+    background: white;
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.sym-btn, #clear-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.sym-btn:hover {
+    border-color: var(--accent-color);
+    background: #f5f3ff;
+}
+
+#clear-btn {
+    background: #fff1f2;
+    color: #e11d48;
+    border-color: #fecdd3;
+}
+
+/* 범위 입력 */
+.range-inputs {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.range-separator {
+    padding-bottom: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+/* 공통 입력 필드 */
+.input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.input-field label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.input-field input {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    outline: none;
+}
+
+.input-field input:focus {
+    border-color: var(--accent-color);
+    background: #f8fafc;
+}
+
+.vertex-inputs {
+    display: flex;
+    gap: 8px;
+}
+
+/* 보조 버튼 스타일 */
+.secondary-btn {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.secondary-btn:hover {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+    color: #1e293b;
+}
+
+.vertex-info {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    font-style: italic;
+}

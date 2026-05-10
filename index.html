@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사이드바 제어 좌표계</title>
+    <!-- 고급스러운 폰트 'Outfit' 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 왼쪽: 메인 그래프 영역 -->
+        <main class="graph-main">
+            <div id="grid-paper" class="grid-paper">
+                <svg id="graph-svg" width="480" height="480" viewBox="-40 -40 480 480">
+                    <defs>
+                        <clipPath id="grid-clip">
+                            <rect x="0" y="0" width="400" height="400" />
+                        </clipPath>
+                    </defs>
+                    <g id="grid-lines"></g>
+                    <g id="axes">
+                        <line x1="0" y1="200" x2="400" y2="200" stroke="#1e293b" stroke-width="2.5" />
+                        <line x1="200" y1="0" x2="200" y2="400" stroke="#1e293b" stroke-width="2.5" />
+                    </g>
+                    <g id="labels" font-size="13" font-family="Outfit" font-weight="600" fill="#0f172a"></g>
+                    <path id="function-line" d="" fill="none" stroke="#6366f1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#grid-clip)" />
+                </svg>
+                
+                <div class="paper-header">
+                    <h1 id="equation-display">f(x) = x²</h1>
+                </div>
+            </div>
+        </main>
+
+        <!-- 오른쪽: 설정 사이드바 -->
+        <aside class="side-panel">
+            <div class="panel-section">
+                <h2 class="section-title">함수 설정</h2>
+                <div class="formula-box">
+                    <label>f(x) = </label>
+                    <input type="text" id="formula-input" value="x^2">
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="sym-btn" data-symbol="^2">x²</button>
+                    <button type="button" class="sym-btn" data-symbol="||">| |</button>
+                    <button type="button" id="clear-btn">초기화</button>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h2 class="section-title">x 범위 설정 (정의역)</h2>
+                <div class="range-inputs">
+                    <div class="input-field">
+                        <label>최소값</label>
+                        <input type="number" id="range-min" value="" placeholder="-10">
+                    </div>
+                    <div class="range-separator">~</div>
+                    <div class="input-field">
+                        <label>최대값</label>
+                        <input type="number" id="range-max" value="" placeholder="10">
+                    </div>
+                </div>
+                <button type="button" id="reset-range-btn" class="secondary-btn">전체 범위 표시</button>
+            </div>
+            
+            <!-- [삭제됨] 이차함수 표준형 도우미 섹션이 제거되었습니다. -->
+        </aside>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
